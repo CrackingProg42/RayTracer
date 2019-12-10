@@ -1,5 +1,8 @@
+Author : QUENTIN FEUILLADE--MONTIXI
+
 # RayTracer
 A simple ray tracer that read obj and mtl files
+
 - [x]  read OBJ
 - [ ]  read MTL
 - [ ]  read multiple OBJ
@@ -10,3 +13,5 @@ A simple ray tracer that read obj and mtl files
 - [ ]  mouving with keybord
 - [ ]  do a ugly rendering (with low res) then get a key input for rendering
 - [ ]  improve performance (Bounding volume hirarchy)
+
+December 2019
