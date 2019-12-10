@@ -1,6 +1,6 @@
 # RayTracer
 A simple ray tracer that read obj and mtl files
-- [ ]  read OBJ
+- [x]  read OBJ
 - [ ]  read MTL
 - [ ]  read multiple OBJ
 - [ ]  create a dedicated scene file
