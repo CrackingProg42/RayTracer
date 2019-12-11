@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 14:19:03 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/10 16:22:01 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/10 17:41:08 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@ public :
 	~Material();
 	Material(Material const &);
 
-	Material 				&operator=(Material const &);
+	Material 	&operator=(Material const &);
+
+	Material 	copy();
 
 	float		get_Ns() const;
 	float		get_Ni() const;
