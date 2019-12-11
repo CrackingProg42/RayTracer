@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 19:31:34 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/10 15:40:29 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 15:07:07 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #define POLYGON_HPP
 
 #include "../global.hpp"
+#include "../Ray/Ray.hpp"
+#include "../Hit/Hit.hpp"
 
 class Polygon
 {
@@ -36,8 +38,10 @@ public:
 	std::map<int, Vector>	get_real_normal() const;
 
 	bool					get_s() const;
+
+	Hit						interect(Ray const &);
 };
 
-std::ostream			&operator<<(std::ostream &, const Polygon &);
+std::ostream				&operator<<(std::ostream &, const Polygon &);
 
 #endif

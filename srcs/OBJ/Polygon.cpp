@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 12:36:41 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/10 15:40:26 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 15:17:26 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,12 @@ std::ostream& operator<<(std::ostream &o, const Polygon &p)
 	else
 		o << "and he has smooth shading off" <<  std::endl;
 	return (o);
+}
+
+Hit						Polygon::interect(Ray const &r)
+{
+	float	t = INFINITY;
+	Vector	normal(42);
+
+	return (Hit(t, normal));
 }
