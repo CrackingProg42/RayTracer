@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 19:18:14 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/11 13:23:08 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 13:55:11 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,12 @@ float				Vector::dot(Vector const &v)
 Vector				Vector::cross(Vector const &v)
 {
 	return (Vector(y * v.getZ() - z * v.getY(), z * v.getX() - x * v.getZ(), x * v.getY() - y * v.getX()));
+}
+
+Vector				Vector::normalize()
+{
+	float dist = (*this).dot(*this);
+	return (Vector(x / dist, y / dist, z / dist));
 }
 
 Vector 		Vector::operator+(Vector const & vector)

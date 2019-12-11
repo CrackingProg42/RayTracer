@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 19:18:05 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/11 13:17:18 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 13:52:29 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ public :
 
 	float		dot(Vector const &);
 	Vector		cross(Vector const &);
-
+	Vector		normalize();
 	float		dist(Vector const &);
 
 private:
