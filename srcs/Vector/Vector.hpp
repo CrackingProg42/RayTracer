@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 19:18:05 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/11 11:56:31 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 13:17:18 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ public :
 
 	Vector();
 	Vector(float x, float y, float z);
+	Vector(float n);
 	~Vector();
 	Vector(Vector const & vector);
 
@@ -30,6 +31,17 @@ public :
 	float getX() const;
 	float getY() const;
 	float getZ() const;
+
+	Vector 		operator+(Vector const & vector);
+	Vector 		operator-(Vector const & vector);
+	Vector 		operator*(Vector const & vector);
+	Vector 		operator/(Vector const & vector);
+	Vector 		operator+(float n);
+	Vector 		operator-(float n);
+	Vector 		operator*(float n);
+	Vector 		operator/(float n);
+	bool 		operator==(Vector const & vector);
+	bool 		operator!=(Vector const & vector);
 
 	float		dot(Vector const &);
 	Vector		cross(Vector const &);
