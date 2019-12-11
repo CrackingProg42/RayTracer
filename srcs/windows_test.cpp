@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 19:16:21 by qfeuilla          #+#    #+#             */
-/*   Updated: 2019/12/09 23:00:39 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 12:05:18 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,19 @@ int main(int ac, char **av)
 	Obj 	obj(av[1]);
     int i;
 	
-	std::cout << obj;
+	// std::cout << obj;
 
 	exit(0);
 
-    /*SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO);
     SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer);
     while (1) {
-		render(renderer, Vector(500, 500, 0));
+		// render(renderer, Vector(500, 500, 0));
         if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
             break;
     }
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-	SDL_Quit();*/
+	SDL_Quit();
     return EXIT_SUCCESS;
 }

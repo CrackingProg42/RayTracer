@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 17:10:42 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/11 11:30:15 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 12:05:49 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 int		material_parser(std::string	mtl_name)
 {
 	FILE 		*mtl = fopen(mtl_name.c_str(), "r");
-	char		tm[20];
+	char		tm[2000];
 	char		mat_name[2000];
 
 	Material 	tmp;
@@ -70,10 +70,18 @@ int		material_parser(std::string	mtl_name)
 		else if (strcmp(tm, "newmtl") == 0)
 		{
 			if (x != INFINITY)
+			{
 				materials[mat_name] = tmp.copy();
+				// std::cout << "ok\n";
+			}
 			fscanf(mtl, "%s", mat_name);
 			// std::cout << "\033[1;31m" << mat_name << "\033[0m" << std::endl;
 		}
+	}
+	if (x != INFINITY)
+	{
+		materials[mat_name] = tmp.copy();
+		// std::cout << "ok\n";
 	}
 	return (0);
 }

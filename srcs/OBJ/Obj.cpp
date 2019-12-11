@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 19:21:38 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/11 11:37:22 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 12:04:49 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ Obj::Obj(std::string fname)
 				// std::cout << "Nope" << std::endl;	
 			fscanf(file, "%s", mat_name);
 			tmp = Obj_group(materials[mat_name], mat_name);
+			// std::cout << materials[mat_name].get_Kd() << std::endl;
 			// std::cout << "\033[1;31m" << mat_name << "\033[0m" << std::endl;
 		}
 		else if (strcmp(tm, "mtllib") == 0)
@@ -96,7 +97,7 @@ Obj::Obj(std::string fname)
 		}
 		// std::cout << tm << std::endl;
 	}
-	std::cout << name << std::endl;
+	// std::cout << name << std::endl;
 }
 
 Obj::Obj() {}
