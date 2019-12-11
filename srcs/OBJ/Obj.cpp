@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 19:21:38 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/10 18:04:37 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 11:37:22 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,8 @@ Obj::Obj(std::string fname)
 		}
 		else if (strcmp(tm, "mtllib") == 0)
 		{
-			std::file
+			std::fscanf(file, "%s", mat_name);
+			material_parser(mat_name);
 		}
 		// std::cout << tm << std::endl;
 	}
