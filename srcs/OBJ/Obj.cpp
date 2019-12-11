@@ -6,17 +6,17 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 19:21:38 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/11 12:04:49 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 22:20:57 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Obj.hpp"
 
-Obj::Obj(std::string fname)
+Obj::Obj(std::string fname, float si)
 {
 	char		tm[20];
 	char		mat_name[2000];
-
+	
 	int			norm;
 	int			vert;
 	int			uv;
@@ -27,44 +27,58 @@ Obj::Obj(std::string fname)
 
 	float		x;
 	float		y;
-	float		z;	
+	float		z;
+
+	int			i;	
 
 	bool		s = false;
 
 	char					su[100];
+
+	size = si;
+
 	name = fname.substr(0, fname.find("."));
 	FILE					*file = fopen(fname.c_str(), "r");
 	Obj_group				tmp;
-	std::list<Vector>		poly;
+	std::map<int, Vector>		polyv;
+	std::map<int, Vector>		polyn;
+	std::map<int, Vector>		polyu;
 	
 	while (std::fscanf(file, "%s", tm) > 0)
 	{
 		if (strcmp(tm, "f") == 0)
 		{
-			poly.clear();
+			i = 0;
+			polyv.clear();
+			polyn.clear();
+			polyu.clear();
 			while(std::fscanf(file, "%d/%d/%d", &vert, &uv, &norm) > 0)
 			{
 				// std::cout << "Normal : " << norm << std::endl;
 				// std::cout << "Vertex : " << vert << std::endl;
 				// std::cout << "Uvs : " << uv << std::endl << std::endl;
-				poly.push_back(Vector(vert, uv, norm));
+				polyv[i] = vertex[vert] * size;
+				polyn[i] = normal[norm] * size;
+				polyu[i++] = uvs[uv] * size;
 			}
-			tmp.push_back(Polygon(s, poly));
+			tmp.push_back_v(Polygon(s, polyv));
+			tmp.push_back_n(Polygon(s, polyn));
+			tmp.push_back_u(Polygon(s, polyu));
 		}
 		else if (strcmp(tm, "v") == 0)
 		{
 			fscanf(file, "%f %f %f", &x, &y, &z);
-			g_vertex[vert_c++] = Vector(x, y, z);
+			vertex[vert_c++] = Vector(x, y, z);
 		}
 		else if (strcmp(tm, "vt") == 0)
 		{
 			fscanf(file, "%f %f", &x, &y);
-			g_uvs[uv_c++] = Vector(x, y, 0);
+			uvs[uv_c++] = Vector(x, y, 0);
 		}
 		else if (strcmp(tm, "vn") == 0)
 		{
 			fscanf(file, "%f %f %f", &x, &y, &z);
-			g_normal[norm_c++] = Vector(x, y, z);
+			normal[norm_c++] = Vector(x, y, z);
 		}
 		else if (strcmp(tm, "s") == 0)
 		{
@@ -76,7 +90,7 @@ Obj::Obj(std::string fname)
 		}
 		else if (strcmp(tm, "usemtl") == 0)
 		{
-			if (tmp.get_polys().size() > 0)
+			if (tmp.get_polyv().size() > 0)
 			{
 				// std::cout << "ok" << std::endl;
 				// std::cout << tmp;
@@ -96,6 +110,13 @@ Obj::Obj(std::string fname)
 			material_parser(mat_name);
 		}
 		// std::cout << tm << std::endl;
+	}
+	if (tmp.get_polyv().size() > 0)
+	{
+		// std::cout << "ok" << std::endl;
+		// std::cout << tmp;
+		// std::cout << s << std::endl;
+		groups.push_back(tmp.copy());
 	}
 	// std::cout << name << std::endl;
 }
@@ -133,4 +154,20 @@ std::ostream			&operator<<(std::ostream &o, const Obj &b)
 std::list<Obj_group>	Obj::get_groups() const
 {
 	return (groups);
+}
+
+Hit						Obj::intersect(Ray const &r)
+{
+	std::list<Obj_group>::iterator	it = groups.begin();
+	Hit	min = Hit(INFINITY, Vector(42));
+	Hit hit;
+
+	for (int i = 0; i < groups.size(); i++)
+	{
+		hit = (*it).intersect(r);
+		if (hit.get_t() < min.get_t() && hit.get_t() >= 0)
+			min = hit;
+		std::advance(it, 1);
+	}
+	return (min);
 }

@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 19:29:52 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/10 17:42:16 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 16:29:10 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ class Obj_group
 private:
 
 	Material			material;
-	std::list<Polygon>	polys;
+	std::list<Polygon>	polyv;
+	std::list<Polygon>	polyn;
+	std::list<Polygon>	polyu;
 	std::string			name;
 
 public:
@@ -35,10 +37,15 @@ public:
 
 	Obj_group		copy();
 
-	void			push_back(Polygon const &);
-	std::list<Polygon>		get_polys() const;
+	std::list<Polygon>		get_polyv() const;
+	std::list<Polygon>		get_polyn() const;
+	std::list<Polygon>		get_polyu() const;
+	void					push_back_v(Polygon const &poly);
+	void					push_back_n(Polygon const &poly);
+	void					push_back_u(Polygon const &poly);
 	Material				get_material() const;
 	std::string				get_name() const;
+	Hit						intersect(Ray const &);
 	
 };
 

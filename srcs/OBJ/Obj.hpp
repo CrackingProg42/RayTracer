@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 19:21:28 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/10 15:40:19 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 16:42:39 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,24 @@ class Obj
 {
 public :	
 
-	Obj(std::string file);
+	Obj(std::string file, float si);
 	Obj();
 	~Obj();
 	Obj(Obj const &);
 
-	Obj 				&operator=(Obj const &);
+	Obj 					&operator=(Obj const &);
 
-	std::list<Obj_group>	get_groups() const;	
+	std::list<Obj_group>	get_groups() const;
+	Hit						intersect(Ray const &r);
 
 private:
 
-	std::list<Obj_group> groups;
-	std::string name;
-
+	std::map<int, Vector>	vertex;
+	std::map<int, Vector>	normal;
+	std::map<int, Vector>	uvs;
+	std::list<Obj_group> 	groups;
+	std::string 			name;
+	float					size;
 };
 
 std::ostream			&operator<<(std::ostream &, const Obj &);
