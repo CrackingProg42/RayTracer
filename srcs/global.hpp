@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 13:35:02 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/09 00:52:54 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/10 17:29:46 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "Vector/Vector.hpp"
 #include "Material/Material.hpp"
 #include <fstream>
+#include <string.h>
 
 extern std::map<int, Vector>				g_normal;				// must start at index 1 !!
 extern std::map<int, Vector>				g_uvs;					// must start at index 1 !!

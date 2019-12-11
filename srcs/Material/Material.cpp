@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 14:18:25 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/10 16:28:57 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/10 17:41:17 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ Material 	&Material::operator=(Material const &mat)
 	Ks = mat.get_Ks();
 	Ke = mat.get_Ke();
 	return(*this);
+}
+
+Material 		Material::copy()
+{
+	return (Material(*this));
 }
 
 float		Material::get_Ns() const

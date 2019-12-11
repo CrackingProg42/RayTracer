@@ -6,12 +6,11 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 19:21:38 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/10 15:40:16 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/10 18:04:37 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Obj.hpp"
-#include <string.h>
 
 Obj::Obj(std::string fname)
 {
@@ -89,6 +88,10 @@ Obj::Obj(std::string fname)
 			fscanf(file, "%s", mat_name);
 			tmp = Obj_group(materials[mat_name], mat_name);
 			// std::cout << "\033[1;31m" << mat_name << "\033[0m" << std::endl;
+		}
+		else if (strcmp(tm, "mtllib") == 0)
+		{
+			std::file
 		}
 		// std::cout << tm << std::endl;
 	}
