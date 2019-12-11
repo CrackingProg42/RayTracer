@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 13:35:02 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/11 11:37:19 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 13:49:21 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 #include "Material/Material.hpp"
 #include <fstream>
 #include <string.h>
+
+#define IMAGE_W 500
+#define IMAGE_H 500
 
 extern std::map<int, Vector>				g_normal;				// must start at index 1 !!
 extern std::map<int, Vector>				g_uvs;					// must start at index 1 !!
