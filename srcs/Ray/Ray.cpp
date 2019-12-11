@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 12:46:27 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/11 13:24:25 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 13:42:53 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,15 @@ Ray::Ray(Ray const &r)
 }
 
 Ray::Ray() { }
+
+Vector	Ray::get_pos(void) const
+{
+	return (pos);	
+}
+
+Vector	Ray::get_dir(void) const
+{
+	return (dir);
+}
 
 Ray::~Ray() { }

@@ -6,7 +6,7 @@
 /*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 12:46:25 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/11 13:01:14 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/11 13:41:35 by QFM              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ public:
 	~Ray();
 	Ray(Ray const &);
 
+	Vector	get_pos(void) const;
+	Vector	get_dir(void) const;
 };
 
 #endif
