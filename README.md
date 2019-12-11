@@ -4,7 +4,7 @@ Author : QUENTIN FEUILLADE--MONTIXI
 A simple ray tracer that read obj and mtl files
 
 - [x]  read OBJ
-- [ ]  read MTL
+- [x]  read MTL
 - [ ]  read multiple OBJ
 - [ ]  create a dedicated scene file
 - [ ]  cast camera rays
