@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+         #
+#    By: qfeuilla <qfeuilla@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/10 16:04:23 by QFM               #+#    #+#              #
-#    Updated: 2019/12/11 16:39:59 by QFM              ###   ########.fr        #
+#    Updated: 2019/12/14 14:23:58 by qfeuilla         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CPPFLAGS = -lSDL2
+CPPFLAGS = -I includes -L lib -lSDL2
 COMPILER = clang++
 
 NAME = RayTracer
