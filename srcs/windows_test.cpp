@@ -6,7 +6,7 @@
 /*   By: qfeuilla <qfeuilla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 19:16:21 by qfeuilla          #+#    #+#             */
-/*   Updated: 2019/12/14 14:46:09 by qfeuilla         ###   ########.fr       */
+/*   Updated: 2019/12/14 15:19:25 by qfeuilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,17 @@ void render(SDL_Renderer *renderer, Obj obj, Camera cam)
 	{
 		for (int x = 0; x < IMAGE_W; x++)
 		{
-			r = cam.cast_ray(x, y);
-			h = obj.intersect(r);
+			/*if (x%8 == 0 && y%8 == 0)
+			{
+				r = cam.cast_ray(x, y);
+				h = obj.intersect(r);
+			}*/
 			if (h.get_t() != INFINITY)
 				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 			else
 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-			SDL_RenderDrawPoint(renderer, x, y);
-			std::cout << "ok";
+			for (int i = 0; i < 8; i++)
+				SDL_RenderDrawPoint(renderer, x, y + i);
 		}
 	}
 	SDL_RenderPresent(renderer);
