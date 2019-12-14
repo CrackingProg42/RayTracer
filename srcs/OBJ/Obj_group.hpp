@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Obj_group.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
+/*   By: qfeuilla <qfeuilla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 19:29:52 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/11 16:29:10 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/14 14:49:50 by qfeuilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "../global.hpp"
 #include "Polygon.hpp"
+#include "../Hit/Hit.hpp"
 
 class Obj_group
 {
