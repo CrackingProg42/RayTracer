@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   windows_test.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
+/*   By: qfeuilla <qfeuilla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 19:16:21 by qfeuilla          #+#    #+#             */
-/*   Updated: 2019/12/11 22:35:30 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/14 14:46:09 by qfeuilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void render(SDL_Renderer *renderer, Obj obj, Camera cam)
 			else
 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			SDL_RenderDrawPoint(renderer, x, y);
+			std::cout << "ok";
 		}
 	}
 	SDL_RenderPresent(renderer);
@@ -54,15 +55,15 @@ int main(int ac, char **av)
     SDL_Renderer *renderer;
     SDL_Window *window;
 	Obj 	obj(av[1], 100);
-	Camera	cam(Vector(10, 10, 10), Vector(0, 1, 0), 90, Vector(0, 1, 0));
+	Camera	cam(Vector(0, 0, 500), Vector(0, 1, 0), 90, Vector(0, 1, 0));
     int i;
 	
-	// std::cout << obj;
-
+	std::cout << obj;
+	
     SDL_Init(SDL_INIT_VIDEO);
     SDL_CreateWindowAndRenderer(IMAGE_W, IMAGE_W, 0, &window, &renderer);
-    while (1) {
-		render(renderer, obj, cam);
+    render(renderer, obj, cam);
+	while (1) {
         if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
             break;
     }

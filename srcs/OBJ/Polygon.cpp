@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Polygon.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: QFM <quentin.feuillade33@gmail.com>        +#+  +:+       +#+        */
+/*   By: qfeuilla <qfeuilla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 12:36:41 by QFM               #+#    #+#             */
-/*   Updated: 2019/12/11 22:36:42 by QFM              ###   ########.fr       */
+/*   Updated: 2019/12/14 14:08:13 by qfeuilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,55 +71,26 @@ std::ostream& operator<<(std::ostream &o, const Polygon &p)
 
 Hit						Polygon::intersect(Ray const &r)
 {
-	float	t = INFINITY;
-	Vector	normal = (vertex[1] - vertex[0]).cross(vertex[2] - vertex[0]).normalize();
-	
-	float NdotRayDirection = normal.dot(r.get_dir()); 
-    if (fabs(NdotRayDirection) < EPSILON) // almost 0 
-        return Hit(INFINITY, Vector(42)); // they are parallel so they don't intersect 
-	
-	float	d = normal.dot(vertex[0]);
-	
-	t =  (normal.dot(r.get_pos()) + d) / NdotRayDirection; 
-	if (t < 0) return Hit(INFINITY, Vector(42));
-	
-    Vector Answer = r.get_pos() + r.get_dir() * t;
+	Vector	e1;
+	Vector	e2;
+	Vector	tvec;
+	Vector	pvec;
+	Vector	qvec;
 
-    // verify that the point falls inside the polygon
-	/*
-    Vector test_line = Answer - vertex[0];
-    Vector test_axis = normal.cross(test_line);
-
-    bool point_is_inside = false;
-
-    Vector test_point = vertex[1] - Answer;
-    bool prev_point_ahead = (test_line.dot(test_point) > 0);
-    bool prev_point_above = (test_axis.dot(test_point) > 0);
-
-    bool this_point_ahead;
-    bool this_point_above;
-
-    int index = 2;
-    while (index < vertex.size())
-    {
-        test_point = vertex[index] - Answer;
-        this_point_ahead = (test_line.dot(test_point) > 0);
-
-        if (prev_point_ahead || this_point_ahead)
-        {
-            this_point_above = (test_axis.dot(test_point) > 0);
-
-            if (prev_point_above != this_point_above)
-            {
-                point_is_inside = !point_is_inside;
-            }
-        }
-		
-        prev_point_ahead = this_point_ahead;
-        prev_point_above = this_point_above;
-        index++;
-    }
-	if (!point_is_inside)
-    	return (Hit(INFINITY, Vector(42)));*/
-	return (Hit(t, normal));
+	e1 = vertex[1] - vertex[0];
+	e2 = vertex[2] - vertex[0];
+	if (e1.dot(pvec = r.get_dir().cross(e2)) > -1e-8 && e1.dot(pvec) < 1e-8)
+		return Hit(INFINITY, Vector(0));
+	if ((tvec = r.get_pos() - vertex[0]).dot(pvec) * \
+		(1 / e1.dot(pvec)) < 0 || tvec.dot(pvec) * (1 / e1.dot(pvec)) > 1)
+		return Hit(INFINITY, Vector(0));
+	qvec = tvec.cross(e1);
+	if (r.get_dir().dot(qvec) * (1 / e1.dot(pvec)) < 0 || tvec.dot(pvec) * \
+		(1 / e1.dot(pvec)) + r.get_dir().dot(qvec) * (1 / e1.dot(pvec)) > 1)
+		return Hit(INFINITY, Vector(0));
+	float t = e2.dot(qvec) * (1 / e1.dot(pvec));
+	qvec = e1.cross(e2);
+	tvec = qvec.normalize();
+	// process_normal(r, tvec);
+	return (Hit(t, tvec));
 }
