@@ -148,7 +148,7 @@ int main(int ac, char **av) {
 	add(new Plane(2.75, Vector3(-1, 0, 0)), Vector3(2, 10, 2), 0, 1); // Right plane
 	add(new Plane(3.0, Vector3(0, -1, 0)), Vector3(6, 6, 6), 0, 1); // Ceiling plane
 	add(new Plane(0.5, Vector3(0, 0, -1)), Vector3(6, 6, 6), 0, 1); // Front plane
-	add(new Sphere(0.5, Vector3(0, 1.9, -3)), Vector3(0, 0, 0), 1000, 1); // Light
+	add(new Sphere(0.5, Vector3(0, 1.9, -3)), Vector3(0, 0, 0), 5000, 1); // Light
 
 	params["refr_index"] = refr_ind;
 	params["spp"] = spp; // samples per pixel

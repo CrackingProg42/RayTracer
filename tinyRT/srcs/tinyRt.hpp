@@ -15,8 +15,8 @@
 #define eps 1e-6
 
 #define PI 3.1415926536
-#define W 500
-#define H 500
+#define W 200
+#define H 200
 #define BLOCK_SIZE 5
 
 static std::mt19937 mersenneTwister;
