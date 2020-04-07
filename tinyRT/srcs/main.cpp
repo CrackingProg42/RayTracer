@@ -97,7 +97,7 @@ void calc_render(pl params, Scene scene, Vector3 ***pix) {
 	}
 }
 
-void render(SDL_Renderer **renderer, Vector3 **pix, int s) {
+void render(SDL_Renderer **renderer, Vector3 **pix, int s, SDL_Window **window) {
 	for (int col = 0; col < W*2; col = col + 2) {
 		for (int row = 0; row < H*2; row = row + 2) {
 			SDL_SetRenderDrawColor(*renderer, std::min((int)(pix[col / 2][row / 2].x / (s + 1)), 255), std::min((int)(pix[col / 2][row / 2].y / (s + 1)), 255), std::min((int)(pix[col / 2][row / 2].z / (s + 1)), 255), 255);
@@ -108,6 +108,7 @@ void render(SDL_Renderer **renderer, Vector3 **pix, int s) {
 		}
 	}
 	SDL_RenderPresent(*renderer);
+	SDL_SetWindowTitle(*window, std::to_string(s).c_str());
 }
 
 int main(int ac, char **av) {
@@ -163,7 +164,8 @@ int main(int ac, char **av) {
 
 	for (int s = 0; s < spp; s++) {
 		calc_render(params, scene, &pix);
-		render(&renderer, pix, s);
+		if (s % 10 == 0)
+			render(&renderer, pix, s, &window);
 	}
 
 	while (1) {
