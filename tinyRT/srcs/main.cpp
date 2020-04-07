@@ -83,7 +83,6 @@ void trace(Ray &ray, const Scene& scene, int depth, Vector3& clr, pl& params) {
 void calc_render(pl params, Scene scene, Vector3 ***pix) {
 
 	for (int col = 0; col < W; col++) {
-		#pragma omp parallel for
 		for (int row = 0; row < H; row++) {
 			Vector3 color;
 			Ray ray;
