@@ -97,11 +97,14 @@ void calc_render(pl params, Scene scene, Vector3 ***pix) {
 	}
 }
 
-void render(SDL_Renderer **renderer, Vector3 **pix) {
-	for (int col = 0; col < W; col++) {
-		for (int row = 0; row < H; row++) {
-			SDL_SetRenderDrawColor(*renderer, std::min((int)pix[col][row].x, 255), std::min((int)pix[col][row].y, 255), std::min((int)pix[col][row].z, 255), 255);
+void render(SDL_Renderer **renderer, Vector3 **pix, int s) {
+	for (int col = 0; col < W*2; col = col + 2) {
+		for (int row = 0; row < H*2; row = row + 2) {
+			SDL_SetRenderDrawColor(*renderer, std::min((int)(pix[col / 2][row / 2].x / (s + 1)), 255), std::min((int)(pix[col / 2][row / 2].y / (s + 1)), 255), std::min((int)(pix[col / 2][row / 2].z / (s + 1)), 255), 255);
 			SDL_RenderDrawPoint(*renderer, col, row);
+			SDL_RenderDrawPoint(*renderer, col, row + 1);
+			SDL_RenderDrawPoint(*renderer, col + 1, row);
+			SDL_RenderDrawPoint(*renderer, col + 1, row + 1);
 		}
 	}
 	SDL_RenderPresent(*renderer);
@@ -145,7 +148,7 @@ int main(int ac, char **av) {
 	add(new Plane(2.75, Vector3(-1, 0, 0)), Vector3(2, 10, 2), 0, 1); // Right plane
 	add(new Plane(3.0, Vector3(0, -1, 0)), Vector3(6, 6, 6), 0, 1); // Ceiling plane
 	add(new Plane(0.5, Vector3(0, 0, -1)), Vector3(6, 6, 6), 0, 1); // Front plane
-	add(new Sphere(0.5, Vector3(0, 1.9, -3)), Vector3(0, 0, 0), 100, 1); // Light
+	add(new Sphere(0.5, Vector3(0, 1.9, -3)), Vector3(0, 0, 0), 1000, 1); // Light
 
 	params["refr_index"] = refr_ind;
 	params["spp"] = spp; // samples per pixel
@@ -156,11 +159,11 @@ int main(int ac, char **av) {
 	}
 	
 	SDL_Init(SDL_INIT_VIDEO);
-    SDL_CreateWindowAndRenderer(W, H, 0, &window, &renderer);
+    SDL_CreateWindowAndRenderer(W*2, H*2, 0, &window, &renderer);
 
 	for (int s = 0; s < spp; s++) {
 		calc_render(params, scene, &pix);
-		render(&renderer, pix);
+		render(&renderer, pix, s);
 	}
 
 	while (1) {
