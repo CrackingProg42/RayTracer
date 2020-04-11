@@ -188,7 +188,7 @@ int main(int ac, char **av) {
 	int bounce_max = 10;
 	int spt = 1000;
 	int tx = 16;
-	int ty = 32;
+	int ty = 16;
 	int spp;
 	float refr_ind;
 	int obj_num = 10;
