@@ -9,12 +9,13 @@
 class Sphere : public Object {
 public:
 	Vector3 c;
-	double r;
+	double r2;
 
-	DEVICE Sphere(double r_ = 0, Vector3 c_ = 0) : c(c_), r(r_) {}
+	DEVICE Sphere(double r_ = 0, Vector3 c_ = 0) : c(c_), r2(r_*r_) {}
 	DEVICE virtual double intersect(const Ray& ray) const {
-		double b = ((ray.o - c) * 2).dot(ray.d);
-		double c_ = (ray.o - c).dot((ray.o - c)) - (r*r);
+		Vector3 m = ray.o - c;
+		double b = (m * 2).dot(ray.d);
+		double c_ = m.dot(m) - r2;
 		double disc = b*b - 4 * c_;
 		if (disc < 0) return 0;
 		else disc = sqrt(disc);
