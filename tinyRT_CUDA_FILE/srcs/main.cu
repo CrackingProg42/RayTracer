@@ -16,16 +16,6 @@ void check_cuda(cudaError_t result, char const *const func, const char *const fi
     }
 }
 
-__global__ void init_random(curandState *rand_state, unsigned long seed) {
-	//Each thread gets same seed, a different sequence number, no offse
-	int i = threadIdx.x + blockIdx.x * blockDim.x;
-	int j = threadIdx.y + blockIdx.y * blockDim.y;
-	if((i >= W) || (j >= H)) return;
-	int pixel_index = j*W + i;
-	//Each thread gets same seed, a different sequence number, no offset
-	curand_init(seed, pixel_index, 0, &rand_state[pixel_index]);
-}
-
 __device__
 void trace(Data *clrlist, Ray &ray, Scene **scene, Vector3& clr, float &refr_ind, const int bounce_max, curandState localState) {
 	// Russian roulette: starting at depth 5, each recursive step will stop with a probability of 0.1
@@ -37,7 +27,7 @@ void trace(Data *clrlist, Ray &ray, Scene **scene, Vector3& clr, float &refr_ind
 	Vector3 rotX, rotY;
 	Vector3 sampledDir;
 	Vector3 rotatedDir;
-	
+
 	int iter = 0;
 	double cost;
 	double rrFactor = 1.0;
@@ -63,6 +53,7 @@ void trace(Data *clrlist, Ray &ray, Scene **scene, Vector3& clr, float &refr_ind
 		hp = ray.o + ray.d * intersection.t;
 		N = intersection.obj->normal(hp);
 		ray.o = hp;
+
 		// Add the emission, the L_e(x,w) part of the rendering equation, but scale it with the Russian Roulette
 		// probability weight.
 		const double emission = intersection.obj->emission;
@@ -114,7 +105,7 @@ void trace(Data *clrlist, Ray &ray, Scene **scene, Vector3& clr, float &refr_ind
 		clrlist[bounce_max - depth - 1] = dt;
 		iter++;
 	}
-	for (int i = bounce_max - iter; i < bounce_max ; i++) {
+	for (int i = bounce_max - iter; i < bounce_max; i++) {
 		if (clrlist[i].type == 1) {
 			clr = clrlist[i].emission + (clr * clrlist[i].clr) * clrlist[i].cost * 0.1 * rrFactor;
 		}
@@ -186,17 +177,19 @@ void create_world(Object **d_list, int size, Scene **d_scene) {
 int main(int ac, char **av) {
 	//in av : av[1] = spp, av[2] = refraction_index
 	int bounce_max = 10;
-	int spt = 1000;
+	int spt = 500;
 	int tx = 16;
-	int ty = 16;
+	int ty = 32;
 	int spp;
 	float refr_ind;
 	int obj_num = 10;
+	float time;
+	cudaEvent_t start, stop;
 
 	if (ac >= 2)
 		spp = std::atoi(av[1]);
 	else
-		spp = 100000;
+		spp = 300000;
 
 	if (ac >= 3)
 		refr_ind = std::atof(av[2]);
@@ -215,22 +208,28 @@ int main(int ac, char **av) {
 
 	dim3 blocks(W/tx+1,H/ty+1);
 	dim3 threads(tx,ty);
+	Data *clrlist;
+	cudaMalloc((void **)&clrlist, sizeof(Data) * bounce_max * W * H);
+	curandState *d_rand_state;
+	cudaMalloc((void **)&d_rand_state, W*H*sizeof(curandState));
 
 	initSDL();
 	for (int s = 0; s < spp; s += spt) {
-		Data *clrlist;
-		cudaMalloc((void **)&clrlist, sizeof(Data) * bounce_max * W * H);
-	
-		curandState *d_rand_state;
-		cudaMalloc((void **)&d_rand_state, W*H*sizeof(curandState));
+		checkCudaErrors( cudaEventCreate(&start) );
+		checkCudaErrors( cudaEventCreate(&stop) );
+		checkCudaErrors( cudaEventRecord(start, 0) );
 		calc_render<<<blocks, threads>>>(spt, bounce_max, clrlist, refr_ind, spp, scene, d_pix, d_rand_state, s);
 		checkCudaErrors(cudaGetLastError());
 		checkCudaErrors(cudaDeviceSynchronize());
 		cudaMemcpy(h_pix, d_pix, W*H*sizeof(Vector3), cudaMemcpyDeviceToHost);
 		render(h_pix, s + spt);
-		cudaFree(clrlist);
-		cudaFree(d_rand_state);
+		checkCudaErrors( cudaEventRecord(stop, 0) );
+		checkCudaErrors( cudaEventSynchronize(stop) );
+		checkCudaErrors( cudaEventElapsedTime(&time, start, stop) );
+		printf("Time to generate:  %3.1f ms \n", time);
 	}
+	cudaFree(clrlist);
+	cudaFree(d_rand_state);
 	quitSDL();
 	cudaFree(d_pix);
 	return 0;
