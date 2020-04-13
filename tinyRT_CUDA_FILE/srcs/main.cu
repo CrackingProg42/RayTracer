@@ -113,7 +113,7 @@ void trace(Data *clrlist, Ray &ray, Scene **scene, Vector3& clr, float &refr_ind
 			clr = clrlist[i].emission + clr * rrFactor;
 		}
 		if (clrlist[i].type == 3) {
-			if (i == bounce_max - 1 || (i - 1 >= 0 && clrlist[i - 1].emission != Vector3(0)))
+			if (i == bounce_max - 1 || (i - 2 >= 0 && clrlist[i - 2].emission != Vector3(0)))
 				clr = clrlist[i].emission + (clr * clrlist[i].clr) * 1.15 * rrFactor;
 			else
 				clr = clrlist[i].emission + clr * 1.15 * rrFactor;
@@ -148,7 +148,7 @@ void create_world(Object **d_list, int size, Scene **d_scene) {
 	d_list[0]->setMat(Vector3(4, 8, 4), Vector3(0), 2);
 
 	d_list[1] = new Sphere(0.5, Vector3(2.0, -2.05, -3.7));
-	d_list[1]->setMat(Vector3(8, 1, 1), Vector3(0), 3);
+	d_list[1]->setMat(Vector3(4, 1, 1), Vector3(0), 3);
 	
 	d_list[2] = new Sphere(0.6, Vector3(-1.75, -1.95, -3.1));
 	d_list[2]->setMat(Vector3(4, 4, 12), Vector3(0), 1);
