@@ -56,8 +56,8 @@ void trace(Data *clrlist, Ray &ray, Scene **scene, Vector3& clr, float &refr_ind
 
 		// Add the emission, the L_e(x,w) part of the rendering equation, but scale it with the Russian Roulette
 		// probability weight.
-		const double emission = intersection.obj->emission;
-		tmp = Vector3(emission, emission, emission) * rrFactor;
+		const Vector3 emission = intersection.obj->emission;
+		tmp = emission * rrFactor;
 
 		// Diffuse BRDF - choose an outgoing direction with hemisphere sampling.
 		if (intersection.obj->type == 1) {
@@ -113,7 +113,10 @@ void trace(Data *clrlist, Ray &ray, Scene **scene, Vector3& clr, float &refr_ind
 			clr = clrlist[i].emission + clr * rrFactor;
 		}
 		if (clrlist[i].type == 3) {
-			clr = clrlist[i].emission + clr * 1.15 * rrFactor;
+			if (i == bounce_max - 1 || (i - 1 >= 0 && clrlist[i - 1].emission != Vector3(0)))
+				clr = clrlist[i].emission + (clr * clrlist[i].clr) * 1.15 * rrFactor;
+			else
+				clr = clrlist[i].emission + clr * 1.15 * rrFactor;
 		}
 	}
 }
@@ -142,42 +145,42 @@ void calc_render(int spt, int bounce_max, Data *clrlist, float refr_ind, int spp
 __global__
 void create_world(Object **d_list, int size, Scene **d_scene) {
 	d_list[0] = new Sphere(1.05, Vector3(-0.75, -1.45, -4.4));
-	d_list[0]->setMat(Vector3(4, 8, 4), 0, 2);
+	d_list[0]->setMat(Vector3(4, 8, 4), Vector3(0), 2);
 
 	d_list[1] = new Sphere(0.5, Vector3(2.0, -2.05, -3.7));
-	d_list[1]->setMat(Vector3(10, 10, 1), 0, 3);
+	d_list[1]->setMat(Vector3(8, 1, 1), Vector3(0), 3);
 	
 	d_list[2] = new Sphere(0.6, Vector3(-1.75, -1.95, -3.1));
-	d_list[2]->setMat(Vector3(4, 4, 12), 0, 1);
+	d_list[2]->setMat(Vector3(4, 4, 12), Vector3(0), 1);
 
 	d_list[3] = new Plane(2.5, Vector3(0, 1, 0));
-	d_list[3]->setMat(Vector3(6, 6, 6), 0, 1);
+	d_list[3]->setMat(Vector3(6, 6, 6), Vector3(0), 1);
 
 	d_list[4] = new Plane(5.5, Vector3(0, 0, 1));
-	d_list[4]->setMat(Vector3(6, 6, 6), 0, 1);
+	d_list[4]->setMat(Vector3(6, 6, 6), Vector3(0), 1);
 
 	d_list[5] = new Plane(2.75, Vector3(1, 0, 0));
-	d_list[5]->setMat(Vector3(10, 2, 2), 0, 1);
+	d_list[5]->setMat(Vector3(10, 2, 2), Vector3(0), 1);
 
 	d_list[6] = new Plane(2.75, Vector3(-1, 0, 0));
-	d_list[6]->setMat(Vector3(2, 10, 2), 0, 1);
+	d_list[6]->setMat(Vector3(2, 10, 2), Vector3(0), 1);
 
 	d_list[7] = new Plane(3.0, Vector3(0, -1, 0));
-	d_list[7]->setMat(Vector3(6, 6, 6), 0, 1);
+	d_list[7]->setMat(Vector3(6, 6, 6), Vector3(0), 1);
 
 	d_list[8] = new Plane(0.5, Vector3(0, 0, -1));
-	d_list[8]->setMat(Vector3(6, 6, 6), 0, 1);
+	d_list[8]->setMat(Vector3(6, 6, 6), Vector3(0), 1);
 
 	d_list[9] = new Sphere(0.5, Vector3(0, 1.9, -3));
-	d_list[9]->setMat(Vector3(0, 0, 0), 5000, 1);
+	d_list[9]->setMat(Vector3(2, 2, 10), Vector3(5000, 5000, 5000), 1);
 	
 	*d_scene = new Scene(d_list, size);
 }
 
 int main(int ac, char **av) {
 	//in av : av[1] = spp, av[2] = refraction_index
-	int bounce_max = 10;
-	int spt = 500;
+	int bounce_max = 7;
+	int spt = 10000;
 	int tx = 16;
 	int ty = 32;
 	int spp;

@@ -11,9 +11,9 @@
 class Object {
 public:
     Vector3 color;
-    double emission;
+    Vector3 emission;
     int type; //
-    DEVICE void setMat(Vector3 color_ = Vector3(), double emission_ = 0, int type_=0) { color = color_; emission = emission_; type = type_; }
+    DEVICE void setMat(Vector3 color_ = Vector3(), Vector3 emission_ = 0, int type_=0) { color = color_; emission = emission_; type = type_; }
     DEVICE virtual double intersect(const Ray&) const = 0;
     DEVICE virtual Vector3 normal(const Vector3&) const = 0;
 };

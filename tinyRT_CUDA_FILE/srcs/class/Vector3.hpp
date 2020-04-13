@@ -18,6 +18,7 @@ public:
     DEVICE double length() { return sqrt(x*x+y*y+z*z); }
     DEVICE double dot(const Vector3 &b) const { return x*b.x+y*b.y+z*b.z; }
     DEVICE Vector3 operator%(Vector3 &b) const { return Vector3(y*b.z-z*b.y, z*b.x-x*b.z, x*b.y-y*b.x); }
+    DEVICE bool operator!=(const Vector3 &b) const { return (b.x != x || b.y != y || b.z != z); }
 };
 
 #endif
