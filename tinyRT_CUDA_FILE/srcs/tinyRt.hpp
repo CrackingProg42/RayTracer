@@ -18,8 +18,7 @@
 #include "class/Scene.hpp"
 #include "class/Sphere.hpp"
 #include "class/Vector3.hpp"
-#include "class/BVH_node.hpp"
-#include "class/Bounding_Box.hpp"
+
 
 #define DEVICE  __host__ __device__
 using namespace std;
@@ -30,8 +29,9 @@ using namespace std;
 #define eps 1e-6
 
 #define PI 3.1415926536
-#define W 200
-#define H 200
+#define W 800
+#define H 800
+#define BLOCK_SIZE 5
 
 __device__
 Vector3 camCastRay(const double x, const double y);

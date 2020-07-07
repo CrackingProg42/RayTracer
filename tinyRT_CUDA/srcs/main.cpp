@@ -1,9 +1,10 @@
 
 #include "tinyRt.hpp"
 
-void trace(Data *clrlist, Ray &ray, Scene **scene, Vector3& clr, float refr_ind, int bounce_max) {
+void trace(Ray &ray, const Scene *scene, Vector3& clr, pl& params, int bounce_max) {
 	// Russian roulette: starting at depth 5, each recursive step will stop with a probability of 0.1
-	Data dt;
+	std::deque<data> clrlist;
+	data dt;
 	Vector3 tmp;
 	Intersection intersection;
 	Vector3 hp;
@@ -20,6 +21,7 @@ void trace(Data *clrlist, Ray &ray, Scene **scene, Vector3& clr, float refr_ind,
 	double cost2;
 	double Rprob;
 	const double rrStopProbability = 0.1;
+
 	for (int depth = 0; depth < bounce_max; depth++) {
 		if (depth >= 5) {
 			if (RND2 <= rrStopProbability) {
@@ -28,14 +30,14 @@ void trace(Data *clrlist, Ray &ray, Scene **scene, Vector3& clr, float refr_ind,
 			rrFactor = 1.0 / (1.0 - rrStopProbability);
 		}
 
-		intersection = (*scene)->intersect(ray);
-		
+		intersection = scene->intersect(ray);
 		if (!intersection) break;
 
 		// Travel the ray to the hit point where the closest object lies and compute the surface normal there.
 		hp = ray.o + ray.d * intersection.t;
 		N = intersection.obj->normal(hp);
 		ray.o = hp;
+
 		// Add the emission, the L_e(x,w) part of the rendering equation, but scale it with the Russian Roulette
 		// probability weight.
 		const double emission = intersection.obj->emission;
@@ -45,12 +47,16 @@ void trace(Data *clrlist, Ray &ray, Scene **scene, Vector3& clr, float refr_ind,
 		if (intersection.obj->type == 1) {
 			ons(N, rotX, rotY);
 			sampledDir = hemisphere(RND2, RND2);
+		 	rotatedDir;
 			rotatedDir.x = Vector3(rotX.x, rotY.x, N.x).dot(sampledDir);
 			rotatedDir.y = Vector3(rotX.y, rotY.y, N.y).dot(sampledDir);
 			rotatedDir.z = Vector3(rotX.z, rotY.z, N.z).dot(sampledDir);
 			ray.d = rotatedDir;	// already normalized
 			cost = ray.d.dot(N);
-			dt = Data(1, intersection.obj->color, cost, tmp);
+			dt.clr = intersection.obj->color;
+			dt.type = 1;
+			dt.cost = cost;
+			dt.emission = tmp;
 		}
 
 		// Specular BRDF - this is a singularity in the rendering equation that follows
@@ -59,13 +65,14 @@ void trace(Data *clrlist, Ray &ray, Scene **scene, Vector3& clr, float refr_ind,
 		if (intersection.obj->type == 2) {
 			cost = ray.d.dot(N);
 			ray.d = (ray.d - N*(cost * 2)).norm();
-			dt = Data(2, intersection.obj->color, cost, tmp);
+			dt.type = 2;
+			dt.emission = tmp;
 		}
 
 		// Glass/refractive BRDF - we use the vector version of Snell's law and Fresnel's law
 		// to compute the outgoing reflection and refraction directions and probability weights.
 		if (intersection.obj->type == 3) {
-			n = refr_ind;
+			n = params["refr_index"];
 			R0 = (1.0 - n) / (1.0 + n);
 			R0 = R0*R0;
 			if (N.dot(ray.d) > 0) { // we're inside the medium
@@ -81,42 +88,43 @@ void trace(Data *clrlist, Ray &ray, Scene **scene, Vector3& clr, float refr_ind,
 			} else { // reflection direction
 				ray.d = (ray.d + N*(cost1 * 2)).norm();
 			}
-			dt = Data(3, intersection.obj->color, cost1, tmp);
+			dt.type = 3;
+			dt.emission = tmp;
 		}
 
-		clrlist[bounce_max - depth - 1] = dt;
+		clrlist.push_front(dt);
 	}
-	for (int i = 0; i < bounce_max ; i++) {
-		if (clrlist[i].type == 1) {
-			clr = clrlist[i].emission + (clr * clrlist[i].clr) * clrlist[i].cost * 0.1 * rrFactor;
+	for (data dt: clrlist) {
+		if (dt.type == 1) {
+			clr = dt.emission + (clr * dt.clr) * dt.cost * 0.1 * rrFactor;
 		}
-		if (clrlist[i].type == 2) {
-			clr = clrlist[i].emission + clr * rrFactor;
+		if (dt.type == 2) {
+			clr = dt.emission + clr * rrFactor;
 		}
-		if (clrlist[i].type == 3) {
-			clr = clrlist[i].emission + clr * 1.15 * rrFactor;
+		if (dt.type == 3) {
+			clr = dt.emission + clr * 1.15 * rrFactor;
 		}
 	}
+	clrlist.clear();
 }
 
-void calc_render(int bounce_max, Data *clrlist, float refr_ind, int spp, Scene **scene, Vector3 *pix) {
+void calc_render(pl params, Scene **scene, Vector3 ***pix) {
 	for (int col = 0; col < W; col++) {
 		for (int row = 0; row < H; row++) {
-			int pixel_index = col*W + row;
-			Vector3 color = Vector3(0, 0, 0);
+			Vector3 color;
 			Ray ray;
 			ray.o = (Vector3(0, 0, 0)); // rays start out from here
 			Vector3 cam = camCastRay(col, row); // construct image plane coordinates
 			cam.x = cam.x + RND / 700; // anti-aliasing for free
 			cam.y = cam.y + RND / 700;
 			ray.d = (cam - ray.o).norm(); // point from the origin to the camera plane
-			trace(clrlist, ray, scene, color, refr_ind, bounce_max);
-			pix[pixel_index] = pix[pixel_index] + color;
+			trace(ray, *scene, color, params, 20);
+			(*pix)[col][row] = (*pix)[col][row] + color;
 		}
 	}
 }
 
-void create_world(Object **d_list, int size, Scene **d_scene) {
+void create_world(Object **d_list, int size) {
 	
 	*(d_list)   = new Sphere(1.05, Vector3(-0.75, -1.45, -4.4));
 	(*(d_list))->setMat(Vector3(4, 8, 4), 0, 2);
@@ -147,23 +155,19 @@ void create_world(Object **d_list, int size, Scene **d_scene) {
 
 	*(d_list + 9)   = new Sphere(0.5, Vector3(0, 1.9, -3));
 	(*(d_list + 9))->setMat(Vector3(0, 0, 0), 5000, 1);
-	*d_scene = new Scene(d_list, size);
 }
 
 int main(int ac, char **av) {
 	//in av : av[1] = spp, av[2] = refraction_index
-	int bounce_max = 20;
-	int tx = 8;
-	int ty = 8;
+
 	int spp;
 	float refr_ind;
 	int obj_num = 10;
-
 	if (ac >= 2)
 		spp = std::atoi(av[1]);
 	else
-		spp = 1000;
-
+		spp = 50;
+	
 	if (ac >= 3)
 		refr_ind = std::atof(av[2]);
 	else
@@ -175,21 +179,24 @@ int main(int ac, char **av) {
 	Object** list;
 	list = (Object**)malloc(sizeof(Object*) * obj_num);
 
-	Scene** scene;
-	scene = (Scene**)malloc(sizeof(Scene*));
+	create_world(list, obj_num);
 
-	create_world(list, obj_num, scene);
+	Scene *scene = new Scene(list, obj_num);
+	
+	params["refr_index"] = refr_ind;
+	params["spp"] = spp; // samples per pixel
 
-	Vector3 *pix = (Vector3 *)malloc(H*W*sizeof(Vector3));
+	Vector3 **pix = new Vector3*[W];
+	for (int i = 0; i < W; i++) {
+		pix[i] = new Vector3[H];
+	}
 
 	initSDL();
 	for (int s = 0; s < spp; s++) {
-		Data *clrlist = (Data *)malloc(sizeof(Data) * bounce_max);
-		calc_render(bounce_max, clrlist, refr_ind, spp, scene, pix);
+		calc_render(params, &scene, &pix);
 		render(pix, s);
-		free(clrlist);
-		break;
 	}
+	loopSDL();
 	quitSDL();
 	return 0;
 }

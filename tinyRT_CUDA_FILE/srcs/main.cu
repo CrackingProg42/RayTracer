@@ -2,7 +2,7 @@
 #include "tinyRt.hpp"
 #include <curand_kernel.h>
 #include <curand.h>
-#include <time.h>
+#include<time.h>
 
 #define checkCudaErrors(val) check_cuda( (val), #val, __FILE__, __LINE__ )
 
@@ -17,7 +17,7 @@ void check_cuda(cudaError_t result, char const *const func, const char *const fi
 }
 
 __device__
-void trace(Data *clrlist, Ray &ray, BVH** scene, Vector3& clr, float &refr_ind, const int bounce_max, curandState localState) {
+void trace(Data *clrlist, Ray &ray, Scene **scene, Vector3& clr, float &refr_ind, const int bounce_max, curandState localState) {
 	// Russian roulette: starting at depth 5, each recursive step will stop with a probability of 0.1
 	Data dt;
 	Vector3 tmp;
@@ -122,7 +122,7 @@ void trace(Data *clrlist, Ray &ray, BVH** scene, Vector3& clr, float &refr_ind, 
 }
 
 __global__
-void calc_render(int spt, int bounce_max, Data *clrlist, float refr_ind, int spp, BVH **scene, Vector3 *pix, curandState *rand_state, int actual) {
+void calc_render(int spt, int bounce_max, Data *clrlist, float refr_ind, int spp, Scene **scene, Vector3 *pix, curandState *rand_state, int actual) {
 	int row = threadIdx.x + blockIdx.x * blockDim.x;
 	int col = threadIdx.y + blockIdx.y * blockDim.y;
 	if((col >= W) || (row >= H)) return;
@@ -143,7 +143,7 @@ void calc_render(int spt, int bounce_max, Data *clrlist, float refr_ind, int spp
 }
 
 __global__
-void create_world(Object **d_list, int size, BVH **d_scene) {
+void create_world(Object **d_list, int size, Scene **d_scene) {
 	d_list[0] = new Sphere(1.05, Vector3(-0.75, -1.45, -4.4));
 	d_list[0]->setMat(Vector3(4, 8, 4), Vector3(0), 2);
 
@@ -174,7 +174,7 @@ void create_world(Object **d_list, int size, BVH **d_scene) {
 	d_list[9] = new Sphere(0.5, Vector3(0, 1.9, -3));
 	d_list[9]->setMat(Vector3(2, 2, 10), Vector3(5000, 5000, 5000), 1);
 	
-	*d_scene = new BVH(d_list, size, Bounding_box(Vector3(-10, -10, -10), Vector3(10, 10, 10)));
+	*d_scene = new Scene(d_list, size);
 }
 
 int main(int ac, char **av) {
@@ -205,8 +205,8 @@ int main(int ac, char **av) {
 
 	Object** list;
 	cudaMalloc((void **)&list, obj_num*sizeof(Object *));
-	BVH** scene;
-	cudaMalloc((void **)&scene, sizeof(BVH *));
+	Scene** scene;
+	cudaMalloc((void **)&scene, obj_num*sizeof(Scene *));
 	create_world<<<1, 1>>>(list, obj_num, scene);
 
 	dim3 blocks(W/tx+1,H/ty+1);
