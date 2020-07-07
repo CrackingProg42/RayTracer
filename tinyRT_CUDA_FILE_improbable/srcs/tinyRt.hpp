@@ -18,8 +18,7 @@
 #include "class/Scene.hpp"
 #include "class/Sphere.hpp"
 #include "class/Vector3.hpp"
-#include "class/BVH_node.hpp"
-#include "class/Bounding_Box.hpp"
+
 
 #define DEVICE  __host__ __device__
 using namespace std;
@@ -36,7 +35,7 @@ using namespace std;
 __device__
 Vector3 camCastRay(const double x, const double y);
 __device__
-Vector3 hemisphere(double u1, double u2);
+void hemisphere(double u1, double u2, Vector3 &vec);
 __device__
 void ons(const Vector3& v1, Vector3& v2, Vector3& v3);
 void render(Vector3 *pix, int s);

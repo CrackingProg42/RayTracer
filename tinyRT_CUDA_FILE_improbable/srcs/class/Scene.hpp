@@ -4,7 +4,6 @@
 #define DEVICE  __host__ __device__
 
 #include "Object.hpp"
-#include "BVH_node.hpp"
 
 #define eps 1e-6
 
@@ -24,12 +23,12 @@ public:
 		Intersection closestIntersection;
 		// intersect all objects, one after the other
 		for (int i = 0; i < list_size; i++) {
-			Intersection inter = objects[i]->intersect(ray);
-			if (inter.t > eps && inter.t < closestIntersection.t) {
-				closestIntersection = inter;
+			double t = objects[i]->intersect(ray);
+			if (t > eps && t < closestIntersection.t) {
+				closestIntersection.t = t;
+				closestIntersection.obj = objects[i];
 			}
 		}
-
 		return closestIntersection;
 	}
 };
