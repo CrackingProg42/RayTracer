@@ -3,10 +3,9 @@
 
 #define DEVICE  __host__ __device__
 
+#include "Object.hpp"
 
 #define inf 1e9
-
-class Object;
 
 class Intersection {
 public:

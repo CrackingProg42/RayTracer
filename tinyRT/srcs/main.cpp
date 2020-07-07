@@ -122,7 +122,7 @@ int main(int ac, char **av) {
 	if (ac >= 2)
 		spp = std::atoi(av[1]);
 	else
-		spp = 1000;
+		spp = 50;
 	
 	if (ac >= 3)
 		refr_ind = std::atof(av[2]);
@@ -164,8 +164,7 @@ int main(int ac, char **av) {
 
 	for (int s = 0; s < spp; s++) {
 		calc_render(params, scene, &pix);
-		if (s % 10 == 0)
-			render(&renderer, pix, s, &window);
+		render(&renderer, pix, s, &window);
 	}
 
 	while (1) {

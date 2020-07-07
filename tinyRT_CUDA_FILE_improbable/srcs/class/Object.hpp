@@ -8,15 +8,13 @@
 
 // Objects have color, emission, type (diffuse, specular, refractive)
 // All object should be intersectable and should be able to compute their surface normals.
-
-class Intersection;
 class Object {
 public:
     Vector3 color;
-    Vector3 emission;
+    double emission;
     int type; //
-    DEVICE void setMat(Vector3 color_ = Vector3(), Vector3 emission_ = 0, int type_=0) { color = color_; emission = emission_; type = type_; }
-    DEVICE virtual Intersection intersect(const Ray&) const = 0;
+    DEVICE void setMat(Vector3 color_ = Vector3(), double emission_ = 0, int type_=0) { color = color_; emission = emission_; type = type_; }
+    DEVICE virtual double intersect(const Ray&) const = 0;
     DEVICE virtual Vector3 normal(const Vector3&) const = 0;
 };
 
