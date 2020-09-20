@@ -1,0 +1,2 @@
+C:\Users\quent\source\repos\RayTracer test\x64\Release\RayTracer test.exe
+C:\Users\quent\Desktop\RayTracer\x64\Release\RayTracer test.exe

@@ -1,0 +1,4 @@
+C:\Users\quent\source\repos\RayTracer test\x64\Debug\RayTracer test.exe
+C:\Users\quent\source\repos\RayTracer test\x64\Debug\RayTracer test.pdb
+C:\Users\quent\Desktop\RayTracer_repo\x64\Debug\RayTracer test.exe
+C:\Users\quent\Desktop\RayTracer_repo\x64\Debug\RayTracer test.pdb

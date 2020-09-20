@@ -1,0 +1,19 @@
+﻿  Compiling CUDA source file main.cu...
+  
+  C:\Users\quent\Desktop\RayTracer>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.0\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\HostX86\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.0\include"     --keep-dir x64\Release -maxrregcount=0  --machine 64 --compile -cudart static     -DWIN32 -DWIN64 -DNDEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /Fdx64\Release\vc142.pdb /FS /Zi  /MD " -o x64\Release\main.cu.obj "C:\Users\quent\Desktop\RayTracer\main.cu" 
+  main.cu
+C:/Users/quent/Desktop/RayTracer/main.cu(94): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:/Users/quent/Desktop/RayTracer/main.cu(95): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:/Users/quent/Desktop/RayTracer/main.cu(96): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:/Users/quent/Desktop/RayTracer/main.cu(97): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:/Users/quent/Desktop/RayTracer/main.cu(109): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:/Users/quent/Desktop/RayTracer/main.cu(110): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:/Users/quent/Desktop/RayTracer/main.cu(181): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:/Users/quent/Desktop/RayTracer/main.cu(186): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:/Users/quent/Desktop/RayTracer/main.cu(346): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:/Users/quent/Desktop/RayTracer/main.cu(347): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:/Users/quent/Desktop/RayTracer/main.cu(525): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:/Users/quent/Desktop/RayTracer/main.cu(568): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+     Creating library C:\Users\quent\Desktop\RayTracer\x64\Release\RayTracer test.lib and object C:\Users\quent\Desktop\RayTracer\x64\Release\RayTracer test.exp
+  LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance
+  RayTracer test.vcxproj -> C:\Users\quent\Desktop\RayTracer\x64\Release\RayTracer test.exe
