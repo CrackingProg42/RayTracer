@@ -488,7 +488,7 @@ __global__ void create_world(Obj** d_list, int size, Scene** d_scene) {
 	d_list[0] = new Sphere(1.05, Vec(-0.75, -1.45, -4.4));
 	d_list[0]->setMat(Vec(4, 8, 4), Vec(0), 2);
 
-	d_list[1] = new Sphere(0.5, Vec(2.0, -2.05, -3.7));
+	d_list[1] = new Sphere(0.5, Vec(1.5, -1.8, -3.7));
 	d_list[1]->setMat(Vec(1, 1, 1), Vec(0), 3);
 
 	d_list[2] = new Sphere(0.6, Vec(-1.75, -1.95, -3.1));
@@ -512,11 +512,8 @@ __global__ void create_world(Obj** d_list, int size, Scene** d_scene) {
 	d_list[8] = new Plane(0.5, Vec(0, 0, -1));
 	d_list[8]->setMat(Vec(6, 6, 6), Vec(0), 1);
 
-	d_list[9] = new Sphere(0.5, Vec(0, 0.5, -2));
-	d_list[9]->setMat(Vec(2, 2, 10), Vec(0), 2);
-
-	d_list[10] = new Sphere(0.5, Vec(0, 1.9, -3));
-	d_list[10]->setMat(Vec(2, 2, 10), Vec(5000, 2000, 2000), 1);
+	d_list[9] = new Sphere(0.5, Vec(0, 1.9, -3));
+	d_list[9]->setMat(Vec(2, 2, 10), Vec(254 * 30, 248 * 30, 221 * 30), 1);
 
 	*d_scene = new Scene(d_list, size);
 }
@@ -526,7 +523,7 @@ void render(int id, int size, int spp, double refr_index, int spt) {
 	int tx = 16;
 	int ty = 16;
 	int bounce_max = 7;
-	int obj_num = 11;
+	int obj_num = 10;
 	int penetration_index = 1;
 
 	Obj** list;
@@ -577,5 +574,5 @@ void render(int id, int size, int spp, double refr_index, int spt) {
 }
 
 int main() {
-	render(1, 600, 1000, 1.5, 100);
+	render(1, 500, 20000, 1.5, 500);
 }
